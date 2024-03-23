@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import bcrypt, { hash } from 'bcrypt'
+import bcrypt from 'bcrypt'
 import createUserToken from "../helpers/create-user-token.js";
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";

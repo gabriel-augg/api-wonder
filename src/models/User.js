@@ -1,5 +1,5 @@
 import { sequelize as db } from "../db/conn.js";
-import { Sequelize, DataTypes, STRING } from "sequelize";
+import { Sequelize, DataTypes } from "sequelize";
 
 const User = db.define('User', {
     id: {
@@ -26,7 +26,7 @@ const User = db.define('User', {
         defaultValue: null
     },
     password_hash: {
-        type: STRING,
+        type: DataTypes.STRING,
         allowNull: false
     }
 })
