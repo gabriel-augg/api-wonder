@@ -5,7 +5,7 @@ import User from "../models/User.js"
 const getUserByToken = async (token) => {
 
     const decoded = jwt.verify(token, "confidential")
-    const user = await User.findByPk(decoded.id)
+    const user = await User.findByPk(decoded.id, {raw: true})
 
     return user
 }

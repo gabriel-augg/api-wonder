@@ -104,7 +104,7 @@ export default class UserController {
             return
         }
 
-        const { name, username, email, image, password, confirmpassword } = req.body;
+        const { name, username, email, password, confirmpassword } = req.body;
 
         if(!name || !username || !email){
             res.status(400).json({message: "error/unexpected-error"})
@@ -134,6 +134,10 @@ export default class UserController {
 
         currentUser.email = email
 
+        if(req.file) {
+            currentUser.image = req.file.filename
+        }
+
         if(password){
             if(password !== confirmpassword){
                 res.status(400).json({message: "error/password-conflict"})
@@ -146,9 +150,14 @@ export default class UserController {
             currentUser.password = hashPassword
         }
 
+        try {
+            await User.update(currentUser, {where: {id:currentUser.id}})
+            res.status(200).json({ user: currentUser })
 
-        res.status(200).json({user: currentUser})
-
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ message: "error/server-issue" })
+        }
 
     }
 }
