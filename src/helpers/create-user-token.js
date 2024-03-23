@@ -5,7 +5,7 @@ const createUserToken = async (user, req, res) => {
         id: user.id
     }, "confidential")
 
-    res.status(201).json({
+    res.status(200).json({
         message: "Successfully authenticated",
         token: token
     })

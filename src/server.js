@@ -11,7 +11,7 @@ app.use(express.json())
 app.use("/users", userRoutes)
 
 
-conn.sync({force: true})
+conn.sync()
 .then(()=> {
     app.listen(port)
 })
