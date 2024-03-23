@@ -1,16 +1,17 @@
 import express from "express"
 import { sequelize as conn } from "./db/conn.js";
 
+import userRoutes from "./routes/userRoutes.js";
+
 const port = 3000
 const app = express()
 
 app.use(express.json())
 
-app.get("/", (req, res) => {
-    res.send('Funcionou')
-})
+app.use("/users", userRoutes)
 
-conn.sync()
+
+conn.sync({force: true})
 .then(()=> {
     app.listen(port)
 })
