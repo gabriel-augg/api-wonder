@@ -81,28 +81,20 @@ export default class UserController {
     }
 
     static async checkUser(req, res){
-        let currentUser = null
-
-        if(req.headers.authorization){
-
+        
+        try {
             const token = getToken(req)
+            const currentUser = await getUserByToken(token)
 
-            currentUser = await getUserByToken(token)
-
-            res.status(200).json({user: currentUser})
-            return
+            res.status(200).json({user: currentUser}) 
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/unexpected-error"})
         }
-
-        res.status(401).json({message: "error/access-denied"})
 
     }
     
     static async updateUser(req, res){
-
-        if(!req.headers.authorization){
-            res.status(401).json({message: "error/access-denied"})
-            return
-        }
 
         const { name, username, email, password, confirmpassword } = req.body;
 
@@ -147,7 +139,7 @@ export default class UserController {
             const salt = await bcrypt.genSalt(10)
             const hashPassword = await bcrypt.hash(password, salt)
 
-            currentUser.password = hashPassword
+            currentUser.password_hash = hashPassword
         }
 
         try {
