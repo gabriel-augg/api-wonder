@@ -5,6 +5,7 @@ import userRoutes from "./routes/userRoutes.js";
 import questionRoutes from "./routes/questionRoutes.js";
 import likeRoutes from "./routes/likeRoutes.js";
 import answerRoutes from "./routes/answerRoutes.js";
+import likeAnswerRoutes from "./routes/likeAnswerRoutes.js";
 
 const port = 3000
 const app = express()
@@ -14,7 +15,7 @@ app.use(express.json())
 app.use("/users", userRoutes)
 app.use("/questions", questionRoutes)
 app.use("/answers", answerRoutes)
-app.use("/like", likeRoutes)
+app.use("/like", likeRoutes, likeAnswerRoutes)
 
 
 conn.sync().then(()=> {

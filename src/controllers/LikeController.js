@@ -1,10 +1,11 @@
 import Question from "../models/Question.js";
+import Answer from "../models/Answer.js";
 import Like from "../models/Like.js";
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 
 export default class LikeController {
-    static async likeOrDislikeQuestion(req, res){
+    static async likeOrDislike(req, res){
         const { id } = req.params;
 
         try {
