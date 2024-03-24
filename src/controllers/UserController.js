@@ -10,6 +10,7 @@ export default class UserController {
         
         if( !name || !username || !email || !password || !confirmpassword ) {
             res.status(400).json({message: "error/unexpected-error"})
+            return
         }
 
         const checkIfUsernameIsAvailable = await User.findOne({where: {username: username}})
