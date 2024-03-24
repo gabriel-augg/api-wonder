@@ -1,10 +1,10 @@
 import Question from "../models/Question.js";
-import LikedQuestion from "../models/LikedQuestion.js";
+import Like from "../models/Like.js";
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 
-export default class LikedQuestionController {
-    static async likeOrDislike(req, res){
+export default class LikeController {
+    static async likeOrDislikeQuestion(req, res){
         const { id } = req.params;
 
         try {
@@ -18,14 +18,14 @@ export default class LikedQuestionController {
             const token = getToken(req)
             const user = await getUserByToken(token)
 
-            const likedQuestion = await LikedQuestion.findOne({where: {UserId:user.id, QuestionId:question.id}, raw: true})
+            const like = await Like.findOne({where: {UserId:user.id, QuestionId:question.id}, raw: true})
 
-            if(likedQuestion){
+            if(like){
                 question.liked--
-                await LikedQuestion.destroy({where: {UserId:user.id, QuestionId:question.id}})
+                await Like.destroy({where: {UserId:user.id, QuestionId:question.id}})
             } else {
                 question.liked++
-                await LikedQuestion.create({UserId: user.id, QuestionId:question.id})
+                await Like.create({UserId: user.id, QuestionId:question.id})
             }
 
             await Question.update(question, {where:{id:id}})

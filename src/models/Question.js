@@ -18,11 +18,6 @@ const Question = db.define("Question", {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false
-    },
-    answer_qty: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-        allowNull: false
     }
 })
 

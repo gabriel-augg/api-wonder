@@ -4,7 +4,7 @@ import { Sequelize, DataTypes } from "sequelize";
 import User from "./User.js";
 import Question from "./Question.js";
 
-const LikedQuestion = db.define("LikedQuestion", {
+const Like = db.define("Like", {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -13,10 +13,10 @@ const LikedQuestion = db.define("LikedQuestion", {
     }
 })
 
-LikedQuestion.belongsTo(User)
-LikedQuestion.belongsTo(Question)
-User.hasMany(LikedQuestion)
-Question.hasMany(LikedQuestion)
+Like.belongsTo(User)
+Like.belongsTo(Question)
+User.hasMany(Like)
+Question.hasMany(Like)
 
 
-export default LikedQuestion;
+export default Like;

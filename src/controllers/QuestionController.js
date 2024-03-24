@@ -1,8 +1,8 @@
 import Question from "../models/Question.js";
-import LikedQuestion from "../models/LikedQuestion.js";
 import User from "../models/User.js";
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
+import Answer from "../models/Answer.js";
 
 export default class QuestionController {
     static async create(req, res){
@@ -34,7 +34,7 @@ export default class QuestionController {
         const { id } = req.params;
 
         try {
-            const question = await Question.findByPk(id)
+            const question = await Question.findByPk(id, {include: Answer})
 
             if(!question){
                 res.status(404).json({message: "error/question-not-found"})
@@ -51,13 +51,22 @@ export default class QuestionController {
 
     static async getAll(req, res){
         try {
-            const questions = await Question.findAll({include: {
-                model: User,
-                attributes: {
-                    exclude: ['password_hash']
-                }
-            }})
-            res.status(200).json({questions: questions})
+
+            const questions = await Question.findAll({
+                include: {
+                    model: User,
+                    attributes: ['username']
+                },
+                raw: true,
+                limit: 5
+            });
+            
+            for (const question of questions) {
+                const answerQty = await Answer.count({ where: { QuestionId: question.id } });
+                question.answer_qty = answerQty;
+            }
+
+            res.status(200).json({questions})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
