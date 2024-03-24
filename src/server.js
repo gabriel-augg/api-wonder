@@ -12,10 +12,10 @@ const app = express()
 
 app.use(express.json())
 
-app.use("/users", userRoutes)
-app.use("/questions", questionRoutes)
-app.use("/answers", answerRoutes)
-app.use("/like", likeRoutes, likeAnswerRoutes)
+app.use("/api/users", userRoutes)
+app.use("/api/questions", questionRoutes)
+app.use("/api/answers", answerRoutes)
+app.use("/api/like", likeRoutes, likeAnswerRoutes)
 
 
 conn.sync().then(()=> {
