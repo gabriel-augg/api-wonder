@@ -1,4 +1,5 @@
 import express from "express"
+import cors from 'cors'
 import { sequelize as conn } from "./db/conn.js";
 
 import userRoutes from "./routes/userRoutes.js";
@@ -11,6 +12,8 @@ import authRoutes from "./routes/authRoutes.js";
 
 const port = 3000
 const app = express()
+
+app.use(cors({ credentials: true, origin: "http://localhost:3000"}))
 
 app.use(express.json())
 
