@@ -2,7 +2,7 @@ import { sequelize as db } from "../db/conn.js";
 import { Sequelize, DataTypes, and } from "sequelize";
 
 import User from "./User.js";
-import Question from "./Question.js";
+import Post from "./Post.js";
 
 const Answer = db.define("Answer", {
     id: {
@@ -23,8 +23,8 @@ const Answer = db.define("Answer", {
 })
 
 Answer.belongsTo(User)
-Answer.belongsTo(Question)
+Answer.belongsTo(Post)
 User.hasMany(Answer)
-Question.hasMany(Answer)
+Post.hasMany(Answer)
 
 export default Answer;

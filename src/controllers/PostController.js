@@ -1,10 +1,10 @@
-import Question from "../models/Question.js";
+import Post from "../models/Post.js";
 import User from "../models/User.js";
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 import Answer from "../models/Answer.js";
 
-export default class QuestionController {
+export default class PostController {
     static async create(req, res){
         const { description } = req.body;
 
@@ -16,32 +16,32 @@ export default class QuestionController {
         const token = getToken(req)
         const user = await getUserByToken(token)
 
-        const questionData = {
+        const postData = {
             description,
             UserId: user.id
         }
 
         try {
-            const newQuestion = await Question.create(questionData)
-            res.status(201).json({question: newQuestion})
+            const newPost = await Post.create(postData)
+            res.status(201).json({post: newPost})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
         }
     }
 
-    static async getQuestionById(req, res){
+    static async getPostById(req, res){
         const { id } = req.params;
 
         try {
-            const question = await Question.findByPk(id, {include: Answer})
+            const post = await Post.findByPk(id, {include: Answer})
 
-            if(!question){
-                res.status(404).json({message: "error/question-not-found"})
+            if(!post){
+                res.status(404).json({message: "error/post-not-found"})
                 return
             }
 
-            res.status(200).json({question: question})
+            res.status(200).json({post: post})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
@@ -52,7 +52,7 @@ export default class QuestionController {
     static async getAll(req, res){
         try {
 
-            const questions = await Question.findAll({
+            const posts = await Post.findAll({
                 include: {
                     model: User,
                     attributes: ['username']
@@ -61,19 +61,19 @@ export default class QuestionController {
                 limit: 5
             });
             
-            for (const question of questions) {
-                const answerQty = await Answer.count({ where: { QuestionId: question.id } });
-                question.answer_qty = answerQty;
+            for (const post of posts) {
+                const answerQty = await Answer.count({ where: { PostId: post.id } });
+                post.answer_qty = answerQty;
             }
 
-            res.status(200).json({questions})
+            res.status(200).json({posts})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
         }
     }
 
-    static async updateQuestionById(req, res){
+    static async updatePostById(req, res){
         const { id } = req.params;
         const { description } = req.body;
 
@@ -83,25 +83,25 @@ export default class QuestionController {
         }
 
         try {
-            const question = await Question.findByPk(id, {raw: true})
+            const post = await Post.findByPk(id, {raw: true})
 
-            if(!question){
-                res.status(404).json({message: "error/question-not-found"})
+            if(!post){
+                res.status(404).json({message: "error/post-not-found"})
                 return
             }
 
             const token = getToken(req)
             const currentUser = await getUserByToken(token)
 
-            if(question.UserId !== currentUser.id){
+            if(post.UserId !== currentUser.id){
                 res.status(401).json({message: "error/access-denied"})
             }
 
-            question.description = description
+            post.description = description
 
-            await Question.update(question, {where: {id:id}})
+            await Post.update(post, {where: {id:id}})
 
-            res.status(200).json({question: question})
+            res.status(200).json({post: post})
 
         } catch (error) {
             console.log(error)
@@ -109,26 +109,26 @@ export default class QuestionController {
         }
     }
 
-    static async removeQuestionById(req, res){
+    static async removePostById(req, res){
         const { id } = req.params;
 
         try {
-            const question = await Question.findByPk(id)
+            const post = await Post.findByPk(id)
 
-            if(!question){
-                res.status(404).json({message: "error/question-not-found"})
+            if(!post){
+                res.status(404).json({message: "error/post-not-found"})
                 return
             }
 
             const token = getToken(req)
             const currentUser = await getUserByToken(token)
 
-            if(currentUser.id !== question.UserId){
+            if(currentUser.id !== post.UserId){
                 res.status(401).json({message: "error/access-denied"})
                 return
             }
 
-            await Question.destroy({where: {id:id}})
+            await Post.destroy({where: {id:id}})
 
             res.status(200).json({message: "success/message-deleted"})
 

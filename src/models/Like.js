@@ -2,7 +2,7 @@ import { sequelize as db } from "../db/conn.js";
 import { Sequelize, DataTypes } from "sequelize";
 
 import User from "./User.js";
-import Question from "./Question.js";
+import Post from "./Post.js";
 
 const Like = db.define("Like", {
     id: {
@@ -14,9 +14,9 @@ const Like = db.define("Like", {
 })
 
 Like.belongsTo(User)
-Like.belongsTo(Question)
+Like.belongsTo(Post)
 User.hasMany(Like)
-Question.hasMany(Like)
+Post.hasMany(Like)
 
 
 export default Like;

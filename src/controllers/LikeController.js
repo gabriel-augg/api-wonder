@@ -1,4 +1,4 @@
-import Question from "../models/Question.js";
+import Post from "../models/Post.js";
 import Answer from "../models/Answer.js";
 import Like from "../models/Like.js";
 import getToken from "../helpers/get-token.js";
@@ -9,27 +9,27 @@ export default class LikeController {
         const { id } = req.params;
 
         try {
-            const question = await Question.findByPk(id, {raw: true})
+            const post = await Post.findByPk(id, {raw: true})
 
-            if(!question){
-                res.status(404).json({message: "error/question-not-found"})
+            if(!post){
+                res.status(404).json({message: "error/post-not-found"})
                 return
             }
 
             const token = getToken(req)
             const user = await getUserByToken(token)
 
-            const like = await Like.findOne({where: {UserId:user.id, QuestionId:question.id}, raw: true})
+            const like = await Like.findOne({where: {UserId:user.id, PostId:post.id}, raw: true})
 
             if(like){
-                question.liked--
-                await Like.destroy({where: {UserId:user.id, QuestionId:question.id}})
+                post.liked--
+                await Like.destroy({where: {UserId:user.id, PostId:post.id}})
             } else {
-                question.liked++
-                await Like.create({UserId: user.id, QuestionId:question.id})
+                post.liked++
+                await Like.create({UserId: user.id, PostId:post.id})
             }
 
-            await Question.update(question, {where:{id:id}})
+            await Post.update(post, {where:{id:id}})
 
             res.status(200).json({message:"success/successfully-disliked-liked"})
         } catch (error) {

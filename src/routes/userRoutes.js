@@ -5,9 +5,7 @@ import imageUpload from "../helpers/image-upload.js";
 
 const userRoutes = Router()
 
-userRoutes.post("/auth/signup", UserController.signUp)
-userRoutes.post("/auth/signin", UserController.signIn)
 userRoutes.get("/checkuser", verifyToken, UserController.checkUser)
-userRoutes.put("/update-user", verifyToken, imageUpload.single("image"), UserController.updateUser)
+userRoutes.put("/updateuser", verifyToken, imageUpload.single("image"), UserController.updateUser)
 
 export default userRoutes;

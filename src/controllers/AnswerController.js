@@ -4,9 +4,9 @@ import Answer from "../models/Answer.js";
 
 export default class AnswerController {
     static async create(req, res){
-        const {description, questionId} = req.body;
+        const {description, postId} = req.body;
 
-        if(!description || !questionId){
+        if(!description || !postId){
             res.status(400).json({message: "error/unexpected-error"})
             return
         }
@@ -17,7 +17,7 @@ export default class AnswerController {
         const answerData = {
             description,
             UserId: user.id,
-            QuestionId: questionId
+            PostId: postId
         }
 
         try {
