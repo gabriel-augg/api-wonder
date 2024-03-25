@@ -17,11 +17,11 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000"}))
 
 app.use(express.json())
 
-app.use("/api/auth", authRoutes)
-app.use("/api/users", userRoutes)
-app.use("/api/posts", postRoutes)
-app.use("/api/answers", answerRoutes)
-app.use("/api/like", likeRoutes, likeAnswerRoutes)
+app.use("/auth", authRoutes)
+app.use("/users", userRoutes)
+app.use("/posts", postRoutes)
+app.use("/answers", answerRoutes)
+app.use("/like", likeRoutes, likeAnswerRoutes)
 
 
 conn.sync().then(()=> {
