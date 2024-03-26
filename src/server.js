@@ -13,7 +13,7 @@ import authRoutes from "./routes/authRoutes.js";
 const port = 3000
 const app = express()
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000"}))
+app.use(cors({ credentials: true, origin: "http://localhost:5173"}))
 
 app.use(express.json())
 

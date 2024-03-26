@@ -34,7 +34,17 @@ export default class PostController {
         const { id } = req.params;
 
         try {
-            const post = await Post.findByPk(id, {include: Answer})
+            const post = await Post.findByPk(id, {
+                include: [
+                    {
+                        model: User,
+                        attributes: ["username"]
+                    },
+                    {
+                        model: Answer
+                    }
+                ]
+            })
 
             if(!post){
                 res.status(404).json({message: "error/post-not-found"})
@@ -50,6 +60,9 @@ export default class PostController {
     }
 
     static async getAll(req, res){
+        const {limit} = req.query
+
+        console.log(limit)
         try {
 
             const posts = await Post.findAll({
@@ -58,7 +71,7 @@ export default class PostController {
                     attributes: ['username']
                 },
                 raw: true,
-                limit: 5
+                limit: parseInt(limit)
             });
             
             for (const post of posts) {

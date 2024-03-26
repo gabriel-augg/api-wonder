@@ -1,8 +1,7 @@
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize("wonder", "root", "kngJySONnRTlrwyeebURhUqRwddUsKlw", {
-    host: "viaduct.proxy.rlwy.net",
-    port: 13015,
+const sequelize = new Sequelize("wonder", "root", "$ecret", {
+    host: "localhost",
     dialect: "mysql"
 })
 

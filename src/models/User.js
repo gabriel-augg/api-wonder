@@ -21,10 +21,6 @@ const User = db.define('User', {
         type: DataTypes.STRING(100),
         allowNull: false
     },
-    image: {
-        type: DataTypes.STRING,
-        defaultValue: null
-    },
     password_hash: {
         type: DataTypes.STRING,
         allowNull: false

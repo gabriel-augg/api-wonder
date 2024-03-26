@@ -11,7 +11,7 @@ export default class UserController {
             const token = getToken(req)
             const currentUser = await getUserByToken(token)
 
-            res.status(200).json({user: currentUser}) 
+            res.status(200).json({user: currentUser})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/unexpected-error"})
@@ -50,10 +50,6 @@ export default class UserController {
         }
 
         currentUser.email = email
-
-        if(req.file) {
-            currentUser.image = req.file.filename
-        }
 
         if(password){
             if(password !== confirmpassword){
