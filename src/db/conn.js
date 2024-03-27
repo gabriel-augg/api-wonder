@@ -1,7 +1,10 @@
 import { Sequelize } from "sequelize";
+import dotenv from "dotenv"
 
-const sequelize = new Sequelize("wonder", "root", "$ecret", {
-    host: "localhost",
+dotenv.config()
+
+const sequelize = new Sequelize("wonder", process.env.SERVER_USERNAME, process.env.SERVER_PASSWORD, {
+    host: process.env.SERVER_HOST,
     dialect: "mysql"
 })
 

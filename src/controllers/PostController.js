@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 import Answer from "../models/Answer.js";
+import formatDate from "../helpers/format-date.js";
 
 export default class PostController {
     static async create(req, res){
@@ -41,9 +42,15 @@ export default class PostController {
                         attributes: ["username"]
                     },
                     {
-                        model: Answer
+                        model: Answer,
+                        include: [
+                            {
+                                model: User,
+                                attributes: ["username"]
+                            }
+                        ]
                     }
-                ]
+                ],
             })
 
             if(!post){
@@ -51,7 +58,14 @@ export default class PostController {
                 return
             }
 
-            res.status(200).json({post: post})
+            const postData = post.get({plain:true})
+            postData.timeAgo = formatDate(postData.createdAt)
+
+            postData.Answers.forEach(answer => {
+                answer.timeAgo = formatDate(answer.createdAt)
+            });
+
+            res.status(200).json({post: postData})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
@@ -62,7 +76,7 @@ export default class PostController {
     static async getAll(req, res){
         const {limit} = req.query
 
-        console.log(limit)
+
         try {
 
             const posts = await Post.findAll({
@@ -77,6 +91,7 @@ export default class PostController {
             for (const post of posts) {
                 const answerQty = await Answer.count({ where: { PostId: post.id } });
                 post.answer_qty = answerQty;
+                post.timeAgo = formatDate(post.createdAt)
             }
 
             res.status(200).json({posts})

@@ -1,7 +1,7 @@
 import getToken from './get-token.js'
 
 const verifyToken = (req, res, next) => {
-    console.log('passou aqui')
+
     if(!req.headers.authorization){
         res.status(401).json({ message: 'error/access-denied'})
         return

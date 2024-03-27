@@ -10,7 +10,7 @@ import likeAnswerRoutes from "./routes/likeAnswerRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
 
-const port = 3000
+const port = process.env.PORT || 3000
 const app = express()
 
 app.use(cors({ credentials: true, origin: "http://localhost:5173"}))

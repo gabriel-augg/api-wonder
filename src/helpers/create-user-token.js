@@ -7,8 +7,7 @@ const createUserToken = async (user, req, res) => {
 
     res.status(200).json({
         message: "success/authenticated",
-        token: token,
-        username: user.username
+        token: token
     })
 }
 
