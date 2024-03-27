@@ -21,17 +21,16 @@ export default class LikeController {
 
             const likeItem = await Like.findOne({where: {UserId:user.id, PostId:post.id}, raw: true})
 
-            post.liked++
-
             if(!likeItem){
                 await Like.create({UserId: user.id, PostId:post.id})
             } else if (likeItem.status) {
                 res.status(401).json({message: "error/access-denied"})
                 return
+            } else if (!likeItem.status){
+                likeItem.status = true
+                await Like.update(likeItem, {where:{id:likeItem.id}})
             }
 
-            likeItem.status = true
-            await Like.update(likeItem, {where:{id:likeItem.id}})
             
             post.liked++
             await Post.update(post, {where:{id:id}})
@@ -80,4 +79,24 @@ export default class LikeController {
         }
     }
 
+    static async getItemLike(req, res){
+        const {id} = req.params
+
+        console.log("entrou aqui")
+
+        const token = getToken(req)
+        const user = await getUserByToken(token)
+
+        try {
+            const likeItem = await Like.findOne({where: {UserId:user.id, PostId:id}})
+
+            if(!likeItem)(
+                res.status(200).json({status: false})
+            )
+
+            res.status(200).json({status: likeItem.status})
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }

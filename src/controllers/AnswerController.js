@@ -1,6 +1,7 @@
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 import Answer from "../models/Answer.js";
+import User from "../models/User.js";
 
 export default class AnswerController {
     static async create(req, res){
@@ -17,7 +18,8 @@ export default class AnswerController {
         const answerData = {
             description,
             UserId: user.id,
-            PostId: postId
+            PostId: postId,
+            username: user.username
         }
 
         try {

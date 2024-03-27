@@ -43,15 +43,9 @@ export default class PostController {
                         attributes: ["username"]
                     },
                     {
-                        model: Answer,
-                        include: [
-                            {
-                                model: User,
-                                attributes: ["username"]
-                            }
-                        ]
+                        model: Answer
                     }
-                ],
+                ]
             })
 
             if(!post){
@@ -59,14 +53,7 @@ export default class PostController {
                 return
             }
 
-            const postData = post.get({plain:true})
-            postData.timeAgo = formatDate(postData.createdAt)
-
-            postData.Answers.forEach(answer => {
-                answer.timeAgo = formatDate(answer.createdAt)
-            });
-
-            res.status(200).json({post: postData})
+            res.status(200).json({post: post})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})

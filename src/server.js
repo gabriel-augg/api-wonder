@@ -24,7 +24,7 @@ app.use("/answers", answerRoutes)
 app.use("/like-dislike", likeRoutes, likeAnswerRoutes)
 
 
-conn.sync().then(()=> {
+conn.sync({force: true}).then(()=> {
     app.listen(port)
 }).catch((error) => {
     console.log(error)

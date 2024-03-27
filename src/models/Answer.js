@@ -19,6 +19,10 @@ const Answer = db.define("Answer", {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false
+    },
+    username: {
+        type: DataTypes.STRING(20),
+        allowNull: false
     }
 })
 
