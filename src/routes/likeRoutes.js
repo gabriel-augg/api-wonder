@@ -4,6 +4,7 @@ import verifyToken from "../helpers/verify-token.js";
 
 const likeRoutes = Router()
 
-likeRoutes.patch("/post/:id", verifyToken, LikeController.likeOrDislike)
+likeRoutes.patch("/posts/like/:id", verifyToken, LikeController.like)
+likeRoutes.patch("/posts/dislike/:id", verifyToken, LikeController.dislike)
 
 export default likeRoutes;

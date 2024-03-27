@@ -4,9 +4,9 @@ import createUserToken from "../helpers/create-user-token.js";
 
 export default class AuthController {
     static async signUp(req, res){
-        const { name, username, email, password, confirmpassword } = req.body
+        const { username, email, password, confirmpassword } = req.body
         
-        if( !name || !username || !email || !password || !confirmpassword ) {
+        if( !username || !email || !password || !confirmpassword ) {
             res.status(400).json({message: "error/unexpected-error"})
             return
         }
@@ -34,7 +34,6 @@ export default class AuthController {
         const hashPassword = await bcrypt.hash(password, salt);
 
         const user = {
-            name,
             username,
             email,
             password_hash: hashPassword

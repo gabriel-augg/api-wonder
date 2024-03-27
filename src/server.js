@@ -21,7 +21,7 @@ app.use("/auth", authRoutes)
 app.use("/users", userRoutes)
 app.use("/posts", postRoutes)
 app.use("/answers", answerRoutes)
-app.use("/like", likeRoutes, likeAnswerRoutes)
+app.use("/like-dislike", likeRoutes, likeAnswerRoutes)
 
 
 conn.sync().then(()=> {

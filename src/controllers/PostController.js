@@ -4,6 +4,7 @@ import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 import Answer from "../models/Answer.js";
 import formatDate from "../helpers/format-date.js";
+import { Op } from "sequelize";
 
 export default class PostController {
     static async create(req, res){
@@ -76,6 +77,19 @@ export default class PostController {
     static async getAll(req, res){
         const {limit} = req.query
 
+        let search = ''
+     
+        if(req.query.search){
+            search = req.query.search
+        }
+
+        let order = 'DESC'
+
+        if(req.query.order === 'old'){
+            order = 'ASC'
+        } else {
+            order = 'DESC'
+        }
 
         try {
 
@@ -84,6 +98,10 @@ export default class PostController {
                     model: User,
                     attributes: ['username']
                 },
+                where: {
+                    description: {[Op.like]: `%${search}%`}
+                },
+                order: [['createdAt', order]],
                 raw: true,
                 limit: parseInt(limit)
             });

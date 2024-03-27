@@ -21,9 +21,9 @@ export default class UserController {
     
     static async updateUser(req, res){
 
-        const { name, username, email, password, confirmpassword } = req.body;
+        const { username, email, password, confirmpassword } = req.body;
 
-        if(!name || !username || !email){
+        if( !username || !email){
             res.status(400).json({message: "error/unexpected-error"})
             return
         }
@@ -32,8 +32,6 @@ export default class UserController {
         const currentUser = await getUserByToken(token)
 
         const checkIfUsernameIsAvailable = await User.findOne({where: {username: username}})
-
-        currentUser.name = name
 
         if(checkIfUsernameIsAvailable && currentUser.username !== username ){
             res.status(409).json({ message: "error/username-unavailable" })

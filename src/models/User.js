@@ -8,10 +8,6 @@ const User = db.define('User', {
         primaryKey: true,
         allowNull: false
     },
-    name: {
-        type: DataTypes.STRING(60),
-        allowNull: false
-    },
     username: {
         type: DataTypes.STRING(20),
         unique: true,
