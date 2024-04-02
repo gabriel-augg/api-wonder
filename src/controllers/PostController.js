@@ -62,15 +62,24 @@ export default class PostController {
     }
 
     static async getAll(req, res){
-        const {limit} = req.query
+
 
         let search = ''
+        let offset = 0
+        let limit = 5
+        let order = 'DESC'
      
         if(req.query.search){
             search = req.query.search
         }
 
-        let order = 'DESC'
+        if(req.query.offset){
+            offset = req.query.offset
+        }
+
+        if(req.query.limit){
+            limit = req.query.limit
+        }
 
         if(req.query.order === 'old'){
             order = 'ASC'
@@ -90,6 +99,7 @@ export default class PostController {
                 },
                 order: [['createdAt', order]],
                 raw: true,
+                offset: parseInt(offset),
                 limit: parseInt(limit)
             });
             

@@ -10,6 +10,10 @@ const LikeAnswer = db.define("LikeAnswer", {
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false
+    },
+    status: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
     }
 })
 
