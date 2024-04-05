@@ -1,6 +1,6 @@
 import express from "express"
 import cors from 'cors'
-import { sequelize as conn } from "./db/conn.js";
+import { connectToDatabase } from "./db/conn.js";
 
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
@@ -24,9 +24,11 @@ app.use("/answers", answerRoutes)
 app.use("/like-dislike", likeRoutes, likeAnswerRoutes)
 
 
-conn.sync().then(()=> {
+connectToDatabase()
+.then(()=>{
     app.listen(port)
-}).catch((error) => {
+})
+.catch((error) => {
     console.log(error)
 })
 

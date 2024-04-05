@@ -35,6 +35,12 @@ export default class PostController {
     static async getPostById(req, res){
         const { id } = req.params;
 
+        let offset = 0
+
+        if(req.query.offset){
+            offset = req.query.offset
+        }
+
         try {
             const post = await Post.findByPk(id, {
                 include: [
@@ -43,7 +49,10 @@ export default class PostController {
                         attributes: ["username"]
                     },
                     {
-                        model: Answer
+                        model: Answer,
+                        limit: 5,
+                        offset: parseInt(offset),
+                        order: [["liked", "DESC"]]
                     }
                 ]
             })

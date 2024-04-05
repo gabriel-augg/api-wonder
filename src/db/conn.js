@@ -9,11 +9,16 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.SERVER_USERNAME
     dialect: 'mysql'
 })
 
-try {
-    await sequelize.authenticate()
-    console.log("Successfully connected ")
-} catch (error) {
-    console.log("Failed to connect: ", error)
+async function connectToDatabase(){
+    try {
+        await sequelize.authenticate()
+        console.log("Successfully connected ")
+        await sequelize.sync({force: true})
+        console.log("Successfully syncronized")
+    } catch (error) {
+        console.log("Failed to connect: ", error)
+    }
 }
 
-export { sequelize }
+
+export { sequelize, connectToDatabase }
