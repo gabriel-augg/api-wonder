@@ -200,40 +200,6 @@ export default class PostController {
         }
     }
 
-    static async addPostsCount(req, res){
-        try {
-            const token = getToken(req)
-            const user = await getUserByToken(token)
-
-            user.postsCount++
-
-            await user.save()
-
-            res.status(200).json({message: "success/succefully-updated"})
-
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({message: "error/server-issue"})
-        }
-    }
-
-    static async removePostsCount(req, res){
-        try {
-            const token = getToken(req)
-            const user = await getUserByToken(token)
-
-            user.postsCount--
-
-            await user.save()
-
-            res.status(200).json({message: "success/succefully-updated"})
-
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({message: "error/server-issue"})
-        }
-    }
-
     static async removePostById(req, res){
         const { id } = req.params;
 

@@ -32,16 +32,91 @@ export default class UserController {
                     exclude: ["password_hash"]
                 }
             })
+
+            if(!user){
+                res.status(404).json({message: "error/user-not-found"})
+                return
+            }
+
             res.status(200).json({user})
         } catch (error) {
             
         }
         
     }
+
+    static async addPostsCount(req, res){
+        try {
+            const token = getToken(req)
+            const user = await getUserByToken(token)
+
+            user.postsCount++
+
+            await user.save()
+
+            res.status(200).json({message: "success/succefully-updated"})
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async removePostsCount(req, res){
+        try {
+            const token = getToken(req)
+            const user = await getUserByToken(token)
+
+            user.postsCount--
+
+            await user.save()
+
+            res.status(200).json({message: "success/succefully-updated"})
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async addFollowsCount(req, res){
+        try {
+            const token = getToken(req)
+            const user = await getUserByToken(token)
+
+            user.followsCount++
+
+            await user.save()
+
+            res.status(200).json({message: "success/succefully-updated"})
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async removeFollowsCount(req, res){
+        try {
+            const token = getToken(req)
+            const user = await getUserByToken(token)
+
+            user.followsCount--
+
+            await user.save()
+
+            res.status(200).json({message: "success/succefully-updated"})
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
     
     static async updateUser(req, res){
 
         const { username, email, description, password, confirmpassword } = req.body;
+
 
         if( !username || !email){
             res.status(400).json({message: "error/unexpected-error"})
@@ -86,8 +161,8 @@ export default class UserController {
         }
 
         try {
-            await User.update(currentUser, {where: {id:currentUser.id}})
-            res.status(200).json({ user: currentUser })
+            await currentUser.save()
+            res.status(200).json({ message: "success/successfully-updated" })
 
         } catch (error) {
             console.log(error)
@@ -95,5 +170,5 @@ export default class UserController {
         }
 
     }
-    
+
 }

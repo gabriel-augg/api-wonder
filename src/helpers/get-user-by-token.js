@@ -6,7 +6,9 @@ const getUserByToken = async (token) => {
 
     const decoded = jwt.verify(token, "confidential")
     const user = await User.findByPk(decoded.id, {
-        attributes: ["id", "username", "email", "description"]
+        attributes: {
+            exclude: ["password_hash"]
+        }
     })
 
     return user
