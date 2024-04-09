@@ -14,7 +14,12 @@ const Post = db.define("Post", {
         type: DataTypes.TEXT,
         allowNull: false
     },
-    liked: {
+    likesCount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false
+    },
+    answersCount: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false

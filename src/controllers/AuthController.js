@@ -49,13 +49,13 @@ export default class AuthController {
     }
 
     static async signIn(req, res){
-        const {username, password} = req.body;
+        const {email, password} = req.body;
 
-        if(!username || !password){
+        if(!email || !password){
             res.status(400).json({message: "error/unexpected-error"})
         }
 
-        const user = await User.findOne({where: {username: username}})
+        const user = await User.findOne({where: {email: email}})
 
         if(!user){
             res.status(404).json({message: "error/user-not-found"})

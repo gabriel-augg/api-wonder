@@ -41,7 +41,7 @@ export default class UserController {
     
     static async updateUser(req, res){
 
-        const { username, email, password, confirmpassword } = req.body;
+        const { username, email, description, password, confirmpassword } = req.body;
 
         if( !username || !email){
             res.status(400).json({message: "error/unexpected-error"})
@@ -69,6 +69,10 @@ export default class UserController {
 
         currentUser.email = email
 
+        if(description){
+            currentUser.description = description
+        }
+
         if(password){
             if(password !== confirmpassword){
                 res.status(400).json({message: "error/password-conflict"})
@@ -91,4 +95,5 @@ export default class UserController {
         }
 
     }
+    
 }

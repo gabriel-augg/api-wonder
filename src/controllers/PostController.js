@@ -3,10 +3,10 @@ import User from "../models/User.js";
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 import Answer from "../models/Answer.js";
-import formatDate from "../helpers/format-date.js";
 import { Op } from "sequelize";
 
 export default class PostController {
+
     static async create(req, res){
         const { description } = req.body;
 
@@ -46,13 +46,17 @@ export default class PostController {
                 include: [
                     {
                         model: User,
-                        attributes: ["username"]
+                        attributes: ["id", "username"]
                     },
                     {
                         model: Answer,
                         limit: 5,
                         offset: parseInt(offset),
-                        order: [["liked", "DESC"]]
+                        order: [["likesCount", "DESC"]],
+                        include: {
+                            model: User,
+                            attributes: ["id", "username"]
+                        }
                     }
                 ]
             })
@@ -71,7 +75,6 @@ export default class PostController {
     }
 
     static async getAll(req, res){
-
 
         let search = ''
         let offset = 0
@@ -101,23 +104,15 @@ export default class PostController {
             const posts = await Post.findAll({
                 include: {
                     model: User,
-                    attributes: ['username']
+                    attributes: ['id', 'username']
                 },
                 where: {
                     description: {[Op.like]: `%${search}%`}
                 },
                 order: [['createdAt', order]],
-                raw: true,
                 offset: parseInt(offset),
                 limit: parseInt(limit)
             });
-
-            if(posts.length > 0){
-                for (const post of posts) {
-                    const answerQty = await Answer.count({ where: { PostId: post.id } });
-                    post.answer_qty = answerQty;
-                }
-            }
 
             res.status(200).json({posts})
         } catch (error) {
@@ -150,7 +145,6 @@ export default class PostController {
                     model: User,
                     attributes: ["username"]
                 }, 
-                raw: true,
                 offset: parseInt(offset),
                 limit: parseInt(limit)
             })
@@ -180,7 +174,7 @@ export default class PostController {
         }
 
         try {
-            const post = await Post.findByPk(id, {raw: true})
+            const post = await Post.findByPk(id)
 
             if(!post){
                 res.status(404).json({message: "error/post-not-found"})
@@ -199,6 +193,40 @@ export default class PostController {
             await Post.update(post, {where: {id:id}})
 
             res.status(200).json({post: post})
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async addPostsCount(req, res){
+        try {
+            const token = getToken(req)
+            const user = await getUserByToken(token)
+
+            user.postsCount++
+
+            await user.save()
+
+            res.status(200).json({message: "success/succefully-updated"})
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async removePostsCount(req, res){
+        try {
+            const token = getToken(req)
+            const user = await getUserByToken(token)
+
+            user.postsCount--
+
+            await user.save()
+
+            res.status(200).json({message: "success/succefully-updated"})
 
         } catch (error) {
             console.log(error)
@@ -234,4 +262,5 @@ export default class PostController {
             res.status(500).json({message: "error/server-issue"})
         }
     }
+
 }

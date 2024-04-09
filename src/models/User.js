@@ -16,8 +16,18 @@ const User = db.define('User', {
     description: DataTypes.STRING(150),
     followsCount: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
+        allowNull: false
+    },
+    postsCount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false
+    },
+    likesCount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false
     },
     email: {
         type: DataTypes.STRING(100),
