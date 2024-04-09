@@ -13,6 +13,12 @@ const User = db.define('User', {
         unique: true,
         allowNull: false
     },
+    description: DataTypes.STRING(150),
+    followsCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
     email: {
         type: DataTypes.STRING(100),
         allowNull: false

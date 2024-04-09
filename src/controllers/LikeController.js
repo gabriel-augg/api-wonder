@@ -82,8 +82,6 @@ export default class LikeController {
     static async getItemLike(req, res){
         const {id} = req.params
 
-        console.log("entrou aqui")
-
         const token = getToken(req)
         const user = await getUserByToken(token)
 

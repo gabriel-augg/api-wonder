@@ -13,7 +13,7 @@ async function connectToDatabase(){
     try {
         await sequelize.authenticate()
         console.log("Successfully connected ")
-        await sequelize.sync({force: true})
+        await sequelize.sync()
         console.log("Successfully syncronized")
     } catch (error) {
         console.log("Failed to connect: ", error)

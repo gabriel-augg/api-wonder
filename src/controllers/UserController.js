@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import bcrypt from 'bcrypt'
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
+import Answer from "../models/Answer.js";
 
 export default class UserController {
 
@@ -17,6 +18,25 @@ export default class UserController {
             res.status(500).json({message: "error/unexpected-error"})
         }
 
+    }
+
+    static async getUserById(req, res){
+        const { id } = req.params;
+        
+        try {
+            const user = await User.findByPk(id, {
+                include: {
+                    model: Answer
+                },
+                attributes: {
+                    exclude: ["password_hash"]
+                }
+            })
+            res.status(200).json({user})
+        } catch (error) {
+            
+        }
+        
     }
     
     static async updateUser(req, res){
