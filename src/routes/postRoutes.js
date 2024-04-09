@@ -6,6 +6,7 @@ const postRoutes = Router()
 
 postRoutes.post("/create", verifyToken, PostController.create)
 postRoutes.get("/", PostController.getAll)
+postRoutes.get("/my-posts", PostController.getAllUserPosts)
 postRoutes.get("/id/:id", PostController.getPostById)
 postRoutes.put("/id/:id", verifyToken, PostController.updatePostById)
 postRoutes.delete("/id/:id", verifyToken, PostController.removePostById)

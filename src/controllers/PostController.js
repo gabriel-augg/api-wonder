@@ -111,14 +111,59 @@ export default class PostController {
                 offset: parseInt(offset),
                 limit: parseInt(limit)
             });
-            
-            for (const post of posts) {
-                const answerQty = await Answer.count({ where: { PostId: post.id } });
-                post.answer_qty = answerQty;
-                post.timeAgo = formatDate(post.createdAt)
+
+            if(posts.length > 0){
+                for (const post of posts) {
+                    const answerQty = await Answer.count({ where: { PostId: post.id } });
+                    post.answer_qty = answerQty;
+                }
             }
 
             res.status(200).json({posts})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async getAllUserPosts(req, res){
+        let offset = 0
+        let limit = 5
+
+        if(req.query.offset){
+            offset = req.query.offset
+        }
+
+        if(req.query.limit){
+            limit = req.query.limit
+        }
+
+        try {
+            const token = getToken(req)
+            const currentUser = await getUserByToken(token)
+
+            const posts = await Post.findAll({
+                where: { 
+                    UserId:currentUser.id
+                }, 
+                include: {
+                    model: User,
+                    attributes: ["username"]
+                }, 
+                raw: true,
+                offset: parseInt(offset),
+                limit: parseInt(limit)
+            })
+
+            if(posts.length > 0){
+                for (const post of posts) {
+                    const answerQty = await Answer.count({ where: { PostId: post.id } });
+                    post.answer_qty = answerQty;
+                }
+            }
+
+            res.status(200).json({posts: posts})
+
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
