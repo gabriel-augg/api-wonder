@@ -29,4 +29,49 @@ export default class AnswerController {
             res.status(500).json({message: "error/server-issue"})
         }
     }
+
+    static async addLikesCount(req, res){
+        const { id } = req.params
+
+        try {
+            const answer = await Answer.findByPk(id)
+
+            if(!answer){
+                res.status(404).json({message: "error/answer-not-found"})
+                return
+            }
+
+            answer.likesCount++
+
+            await answer.save()
+
+            res.status(204).json({})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async removeLikesCount(req, res){
+        const { id } = req.params
+
+        try {
+            const answer = await Answer.findByPk(id)
+
+            if(!answer){
+                res.status(404).json({message: "error/answer-not-found"})
+                return
+            }
+
+            answer.likesCount--
+
+            await answer.save()
+
+            res.status(204).json({})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
 }
