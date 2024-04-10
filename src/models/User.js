@@ -14,6 +14,10 @@ const User = db.define('User', {
         allowNull: false
     },
     description: DataTypes.STRING(150),
+    photo_url: {
+        type: DataTypes.STRING,
+        defaultValue: null
+    },
     followsCount: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
