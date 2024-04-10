@@ -7,8 +7,8 @@ const likeRoutes = Router()
 likeRoutes.get("/:id/post", verifyToken, LikeController.isPostLiked)
 likeRoutes.get("/:id/answer", verifyToken, LikeController.isAnswerLiked)
 likeRoutes.post("/post/:id/like", verifyToken, LikeController.likePost)
-likeRoutes.delete("/post/:id/dislike", verifyToken, LikeController.dislikePost)
 likeRoutes.post("/answer/:id/like", verifyToken, LikeController.likeAnswer)
+likeRoutes.delete("/post/:id/dislike", verifyToken, LikeController.dislikePost)
 likeRoutes.delete("/answer/:id/dislike", verifyToken, LikeController.dislikeAnswer)
 
 

@@ -134,7 +134,7 @@ export default class LikeController {
             const isAnswerLiked = await Like.findOne({where: {UserId: user.id, AnswerId: answer.id}})
 
             if(!isAnswerLiked){
-                res.status(404).json({message: "error/post-not-liked"})
+                res.status(404).json({message: "error/answer-not-liked"})
                 return
             }
 
