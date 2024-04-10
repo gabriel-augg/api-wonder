@@ -4,8 +4,12 @@ import verifyToken from "../helpers/verify-token.js";
 
 const likeRoutes = Router()
 
-likeRoutes.patch("/posts/like/:id", verifyToken, LikeController.like)
-likeRoutes.patch("/posts/dislike/:id", verifyToken, LikeController.dislike)
-likeRoutes.get("/posts/:id", verifyToken, LikeController.getItemLike)
+likeRoutes.get("/:id/post", verifyToken, LikeController.isPostLiked)
+likeRoutes.get("/:id/answer", verifyToken, LikeController.isAnswerLiked)
+likeRoutes.post("/post/:id/like", verifyToken, LikeController.likePost)
+likeRoutes.delete("/post/:id/dislike", verifyToken, LikeController.dislikePost)
+likeRoutes.post("/answer/:id/like", verifyToken, LikeController.likeAnswer)
+likeRoutes.delete("/answer/:id/dislike", verifyToken, LikeController.dislikeAnswer)
+
 
 export default likeRoutes;

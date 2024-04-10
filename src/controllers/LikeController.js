@@ -5,11 +5,12 @@ import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 
 export default class LikeController {
-    static async like(req, res){
+
+    static async likePost(req, res){
         const { id } = req.params;
 
         try {
-            const post = await Post.findByPk(id, {raw: true})
+            const post = await Post.findByPk(id)
 
             if(!post){
                 res.status(404).json({message: "error/post-not-found"})
@@ -19,34 +20,27 @@ export default class LikeController {
             const token = getToken(req)
             const user = await getUserByToken(token)
 
-            const likeItem = await Like.findOne({where: {UserId:user.id, PostId:post.id}, raw: true})
+            const isLiked = await Like.findOne({where: {UserId: user.id, PostId: post.id}})
 
-            if(!likeItem){
-                await Like.create({UserId: user.id, PostId:post.id})
-            } else if (likeItem.status) {
-                res.status(401).json({message: "error/access-denied"})
+            if(isLiked){
+                res.status(401).json({message: "error/post-already-liked"})
                 return
-            } else if (!likeItem.status){
-                likeItem.status = true
-                await Like.update(likeItem, {where:{id:likeItem.id}})
             }
 
-            
-            post.liked++
-            await Post.update(post, {where:{id:id}})
+            await Like.create({UserId: user.id, PostId: post.id, AnswerId: null})
 
-            res.status(200).json({message:"success/successfully-liked"})
+            res.status(204).json({})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
         }
     }
 
-    static async dislike(req, res){
+    static async dislikePost(req, res){
         const { id } = req.params;
 
         try {
-            const post = await Post.findByPk(id, {raw: true})
+            const post = await Post.findByPk(id)
 
             if(!post){
                 res.status(404).json({message: "error/post-not-found"})
@@ -56,45 +50,122 @@ export default class LikeController {
             const token = getToken(req)
             const user = await getUserByToken(token)
 
-            const likeItem = await Like.findOne({where: {UserId:user.id, PostId:post.id}, raw: true})
+            const isPostLiked = await Like.findOne({where: {UserId:user.id, PostId: post.id}})
 
-            if(!likeItem || !likeItem.status){
-                res.status(401).json({message: "error/access-denied"})
+            if(!isPostLiked){
+                res.status(404).json({message: "error/post-not-liked"})
                 return
             }
-            console.log(likeItem)
 
-            likeItem.status = false
-
-            console.log(likeItem)
-            await Like.update(likeItem, {where: {id:likeItem.id}})
+            await Like.destroy({where: {id: isPostLiked.id}})
         
-            post.liked--
-            await Post.update(post, {where:{id:id}})
-
-            res.status(200).json({message:"success/successfully-disliked"})
+            res.status(204).json({})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
         }
     }
 
-    static async getItemLike(req, res){
+    static async isPostLiked(req, res){
         const {id} = req.params
 
-        const token = getToken(req)
-        const user = await getUserByToken(token)
+        let status = null
 
         try {
-            const likeItem = await Like.findOne({where: {UserId:user.id, PostId:id}})
 
-            if(!likeItem)(
-                res.status(200).json({status: false})
-            )
+            const token = getToken(req)
+            const user = await getUserByToken(token)
 
-            res.status(200).json({status: likeItem.status})
+            const isLiked = await Like.findOne({where: {UserId:user.id, PostId:id}})
+
+            status = (isLiked) ? true : false
+
+            res.status(200).json({status})
         } catch (error) {
             console.log(error)
+            res.status(500).json({message: "error/server-issue"})
         }
     }
+
+    static async likeAnswer(req, res){
+        const { id } = req.params;
+
+        try {
+            const answer = await Answer.findByPk(id)
+
+            if(!answer){
+                res.status(404).json({message: "error/answer-not-found"})
+                return
+            }
+
+            const token = getToken(req)
+            const user = await getUserByToken(token)
+
+            const isLiked = await Like.findOne({where: {UserId: user.id, AnswerId: answer.id}})
+
+            if(isLiked){
+                res.status(401).json({message: "error/answer-already-liked"})
+                return
+            }
+
+            await Like.create({UserId: user.id, PostId: null, AnswerId: answer.id})
+
+            res.status(204).json({})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async dislikeAnswer(req, res){
+        const { id } = req.params;
+
+        try {
+            const answer = await Answer.findByPk(id)
+
+            if(!answer){
+                res.status(404).json({message: "error/answer-not-found"})
+                return
+            }
+
+            const token = getToken(req)
+            const user = await getUserByToken(token)
+
+            const isAnswerLiked = await Like.findOne({where: {UserId: user.id, AnswerId: answer.id}})
+
+            if(!isAnswerLiked){
+                res.status(404).json({message: "error/post-not-liked"})
+                return
+            }
+
+            await Like.destroy({where: {id: isAnswerLiked.id}})
+        
+            res.status(204).json({})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async isAnswerLiked(req, res){
+        const {id} = req.params
+
+        let status = null
+
+        try {
+
+            const token = getToken(req)
+            const user = await getUserByToken(token)
+
+            const isLiked = await Like.findOne({where: {UserId: user.id, AnswerId: id}})
+
+            status = (isLiked) ? true : false
+
+            res.status(200).json({status})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
 }

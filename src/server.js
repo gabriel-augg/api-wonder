@@ -6,7 +6,6 @@ import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import likeRoutes from "./routes/likeRoutes.js";
 import answerRoutes from "./routes/answerRoutes.js";
-import likeAnswerRoutes from "./routes/likeAnswerRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
 
@@ -21,7 +20,7 @@ app.use("/auth", authRoutes)
 app.use("/users", userRoutes)
 app.use("/posts", postRoutes)
 app.use("/answers", answerRoutes)
-app.use("/like-dislike", likeRoutes, likeAnswerRoutes)
+app.use("/like-dislike", likeRoutes)
 
 
 connectToDatabase()

@@ -24,8 +24,8 @@ export default class PostController {
         }
 
         try {
-            const newPost = await Post.create(postData)
-            res.status(201).json({post: newPost})
+            const post = await Post.create(postData)
+            res.status(201).json({post})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
@@ -66,7 +66,7 @@ export default class PostController {
                 return
             }
 
-            res.status(200).json({post: post})
+            res.status(200).json({post})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
@@ -123,14 +123,9 @@ export default class PostController {
 
     static async getAllUserPosts(req, res){
         let offset = 0
-        let limit = 5
 
         if(req.query.offset){
             offset = req.query.offset
-        }
-
-        if(req.query.limit){
-            limit = req.query.limit
         }
 
         try {
@@ -139,24 +134,17 @@ export default class PostController {
 
             const posts = await Post.findAll({
                 where: { 
-                    UserId:currentUser.id
+                    UserId: currentUser.id
                 }, 
                 include: {
                     model: User,
-                    attributes: ["username"]
+                    attributes: ["id", "username"]
                 }, 
                 offset: parseInt(offset),
-                limit: parseInt(limit)
+                limit: 5
             })
 
-            if(posts.length > 0){
-                for (const post of posts) {
-                    const answerQty = await Answer.count({ where: { PostId: post.id } });
-                    post.answer_qty = answerQty;
-                }
-            }
-
-            res.status(200).json({posts: posts})
+            res.status(200).json({posts})
 
         } catch (error) {
             console.log(error)
@@ -190,10 +178,98 @@ export default class PostController {
 
             post.description = description
 
-            await Post.update(post, {where: {id:id}})
+            await post.save()
 
-            res.status(200).json({post: post})
+            res.status(200).json({post})
 
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async addAnswersCount(req, res){
+        const { id } = req.params
+
+        try {
+            const post = await Post.findByPk(id)
+
+            if(!post){
+                res.status(404).json({message: "error/post-not-found"})
+                return
+            }
+
+            post.answersCount++
+
+            await post.save()
+
+            res.status(204).json({})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async removeAnswersCount(req, res){
+        const { id } = req.params
+
+        try {
+            const post = await Post.findByPk(id)
+
+            if(!post){
+                res.status(404).json({message: "error/post-not-found"})
+                return
+            }
+
+            post.answersCount--
+
+            await post.save()
+
+            res.status(204).json({})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async addLikesCount(req, res){
+        const { id } = req.params
+
+        try {
+            const post = await Post.findByPk(id)
+
+            if(!post){
+                res.status(404).json({message: "error/post-not-found"})
+                return
+            }
+
+            post.likesCount++
+
+            await post.save()
+
+            res.status(204).json({})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }
+
+    static async removeLikesCount(req, res){
+        const { id } = req.params
+
+        try {
+            const post = await Post.findByPk(id)
+
+            if(!post){
+                res.status(404).json({message: "error/post-not-found"})
+                return
+            }
+
+            post.likesCount--
+
+            await post.save()
+
+            res.status(204).json({})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
@@ -221,7 +297,7 @@ export default class PostController {
 
             await Post.destroy({where: {id:id}})
 
-            res.status(200).json({message: "success/message-deleted"})
+            res.status(204).json({})
 
         } catch (error) {
             console.log(error)
