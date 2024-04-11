@@ -22,11 +22,24 @@ export default class UserController {
 
     static async getUserById(req, res){
         const { id } = req.params;
+
+        let offset = 0
+
+        if(req.query.offset){
+            offset = req.query.offset
+        }      
         
         try {
             const user = await User.findByPk(id, {
                 include: {
-                    model: Post
+                    model: Post,
+                    include: {
+                        model: User,
+                        attributes: ["username"],
+                    },
+                    offset: parseInt(offset),
+                    limit: 5
+                    
                 },
                 attributes: {
                     exclude: ["password_hash"]
@@ -81,15 +94,15 @@ export default class UserController {
     }
 
     static async addFollowsCount(req, res){
+        const { id } = req.params
         try {
-            const token = getToken(req)
-            const user = await getUserByToken(token)
+            const user = await User.findByPk(id)
 
             user.followsCount++
 
             await user.save()
 
-            res.status(200).json({message: "success/succefully-updated"})
+            res.status(204).json({})
 
         } catch (error) {
             console.log(error)
@@ -98,15 +111,15 @@ export default class UserController {
     }
 
     static async removeFollowsCount(req, res){
+        const { id } = req.params
         try {
-            const token = getToken(req)
-            const user = await getUserByToken(token)
+            const user = await User.findByPk(id)
 
             user.followsCount--
 
             await user.save()
 
-            res.status(200).json({message: "success/succefully-updated"})
+            res.status(204).json({})
 
         } catch (error) {
             console.log(error)

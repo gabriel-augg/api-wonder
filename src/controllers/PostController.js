@@ -46,7 +46,7 @@ export default class PostController {
                 include: [
                     {
                         model: User,
-                        attributes: ["id", "username"]
+                        attributes: ["username"]
                     },
                     {
                         model: Answer,
@@ -55,7 +55,7 @@ export default class PostController {
                         order: [["likesCount", "DESC"]],
                         include: {
                             model: User,
-                            attributes: ["id", "username"]
+                            attributes: ["username"]
                         }
                     }
                 ]
@@ -79,7 +79,6 @@ export default class PostController {
         let search = ''
         let offset = 0
         let limit = 5
-        let order = 'DESC'
      
         if(req.query.search){
             search = req.query.search
@@ -93,23 +92,17 @@ export default class PostController {
             limit = req.query.limit
         }
 
-        if(req.query.order === 'old'){
-            order = 'ASC'
-        } else {
-            order = 'DESC'
-        }
-
         try {
 
             const posts = await Post.findAll({
                 include: {
                     model: User,
-                    attributes: ['id', 'username']
+                    attributes: ['username']
                 },
                 where: {
                     description: {[Op.like]: `%${search}%`}
                 },
-                order: [['createdAt', order]],
+                order: [['likesCount', "DESC"]],
                 offset: parseInt(offset),
                 limit: parseInt(limit)
             });
@@ -138,7 +131,7 @@ export default class PostController {
                 }, 
                 include: {
                     model: User,
-                    attributes: ["id", "username"]
+                    attributes: ["username"]
                 }, 
                 offset: parseInt(offset),
                 limit: 5

@@ -1,6 +1,7 @@
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 import Answer from "../models/Answer.js";
+import User from "../models/User.js";
 
 export default class AnswerController {
     static async create(req, res){
@@ -23,7 +24,14 @@ export default class AnswerController {
 
         try {
             const answer = await Answer.create(answerData)
-            res.status(201).json({answer: answer})
+
+            let dataAnswer = answer.get({plain: true})
+
+            dataAnswer.User = {
+                username: user.username
+            }
+            
+            res.status(201).json({answer: dataAnswer})
         } catch (error) {
             console.log(error)
             res.status(500).json({message: "error/server-issue"})
