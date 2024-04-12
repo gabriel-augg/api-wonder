@@ -58,14 +58,14 @@ export default class AuthController {
         const user = await User.findOne({where: {email: email}})
 
         if(!user){
-            res.status(404).json({message: "Senha ou usuário incorreto!"})
+            res.status(404).json({message: "Senha ou email incorreto!"})
             return
         }
 
         const checkPassword = await bcrypt.compare(password, user.password_hash)
 
         if(!checkPassword){
-            res.status(401).json({message: "Senha ou usuário incorreto!"})
+            res.status(401).json({message: "Senha ou email incorreto!"})
             return
         }
 
