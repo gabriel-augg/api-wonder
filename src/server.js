@@ -13,7 +13,7 @@ import authRoutes from "./routes/authRoutes.js";
 const port = process.env.PORT || 3000
 const app = express()
 
-app.use(cors({ credentials: true, origin: "https://wonder-br.vercel.app/"}))
+app.use(cors({ credentials: true, origin: "https://wonder-br.vercel.app"}))
 
 app.use(express.json())
 
