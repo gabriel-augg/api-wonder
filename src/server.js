@@ -13,7 +13,7 @@ import authRoutes from "./routes/authRoutes.js";
 const port = process.env.PORT || 3000
 const app = express()
 
-app.use(cors({ credentials: true, origin: "http://localhost:5173"}))
+app.use(cors({ credentials: true, origin: "https://wonder-ten.vercel.app"}))
 
 app.use(express.json())
 
