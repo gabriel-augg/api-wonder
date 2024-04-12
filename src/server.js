@@ -5,7 +5,7 @@ import { connectToDatabase } from "./db/conn.js";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import likeRoutes from "./routes/likeRoutes.js";
-// import followRoutes from "./routes/followRoutes.js"
+import followRoutes from "./routes/followRoutes.js"
 import answerRoutes from "./routes/answerRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
