@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 import Answer from "../models/Answer.js";
+import Like from "../models/Like.js"
 import { Op } from "sequelize";
 
 export default class PostController {
@@ -144,6 +145,38 @@ export default class PostController {
             res.status(500).json({message: "error/server-issue"})
         }
     }
+
+    static async getAllUserLikedPost(req, res){
+
+        try {
+            const token = getToken(req)
+            const currentUser = await getUserByToken(token)
+
+            let posts;
+
+            const likes = await Like.findAll({
+                where: { 
+                    UserId: currentUser.id
+                },
+                include: {
+                    model: Post,
+                    include: {
+                        model: User,
+                        attributes: ["username"]
+                    }
+                }
+            })
+
+            posts = likes.map((like) => like.get({plain: true})).map((like) => like.Post)
+
+            console.log(posts)
+
+            res.status(200).json({posts})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message: "error/server-issue"})
+        }
+    }   
 
     static async updatePostById(req, res){
         const { id } = req.params;
