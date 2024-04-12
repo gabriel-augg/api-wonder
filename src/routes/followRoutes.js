@@ -1,12 +1,12 @@
 import { Router } from "express";
-import followController from "../controllers/followController.js";
+import FollowController from "../controllers/FollowController.js";
 import verifyToken from "../helpers/verify-token.js";
 
 const followRoutes = Router()
 
-followRoutes.get("/:id/followed", verifyToken, followController.isFollowed)
-followRoutes.post("/:id/follow", verifyToken, followController.follow)
-followRoutes.delete("/:id/unfollow", verifyToken, followController.unfollow)
+followRoutes.get("/:id/followed", verifyToken, FollowController.isFollowed)
+followRoutes.post("/:id/follow", verifyToken, FollowController.follow)
+followRoutes.delete("/:id/unfollow", verifyToken, FollowController.unfollow)
 
 
 export default followRoutes;

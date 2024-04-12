@@ -3,7 +3,7 @@ import Follow from "../models/Follow.js";
 import getToken from "../helpers/get-token.js";
 import getUserByToken from "../helpers/get-user-by-token.js";
 
-export default class followController {
+export default class FollowController {
 
     static async follow(req, res){
         const { id } = req.params;
