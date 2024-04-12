@@ -174,7 +174,7 @@ export default class PostController {
                 limit: 5
             })
 
-            posts = likes.map((like) => like.get({plain: true})).map((like) => like.Post)
+            posts = likes.map((like) => like.get({plain: true})).map((like) => like.Post).filter((post) => post !== null)
 
             res.status(200).json({posts})
         } catch (error) {
