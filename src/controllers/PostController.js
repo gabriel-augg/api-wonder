@@ -152,7 +152,12 @@ export default class PostController {
             const token = getToken(req)
             const currentUser = await getUserByToken(token)
 
+            let offset = 0
             let posts;
+
+            if(req.query.offset){
+                offset = req.query.offset
+            }
 
             const likes = await Like.findAll({
                 where: { 
@@ -164,12 +169,12 @@ export default class PostController {
                         model: User,
                         attributes: ["username"]
                     }
-                }
+                },
+                offset: parseInt(offset),
+                limit: 5
             })
 
             posts = likes.map((like) => like.get({plain: true})).map((like) => like.Post)
-
-            console.log(posts)
 
             res.status(200).json({posts})
         } catch (error) {
