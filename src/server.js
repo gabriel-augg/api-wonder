@@ -22,7 +22,7 @@ app.use("/users", userRoutes)
 app.use("/posts", postRoutes)
 app.use("/answers", answerRoutes)
 app.use("/likes", likeRoutes)
-// app.use("/follows", followRoutes)
+app.use("/follows", followRoutes)
 
 
 connectToDatabase()
