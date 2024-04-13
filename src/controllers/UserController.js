@@ -143,7 +143,7 @@ export default class UserController {
         const checkIfUsernameIsAvailable = await User.findOne({where: {username: username}})
 
         if(checkIfUsernameIsAvailable && currentUser.username !== username ){
-            res.status(409).json({ message: "error/username-unavailable" })
+            res.status(409).json({ message: "Usuário indisponível!" })
             return
         }
 
@@ -152,7 +152,7 @@ export default class UserController {
         const checkIfEmailIsAvailable = await User.findOne({where: {email: email}})
 
         if(checkIfEmailIsAvailable && currentUser.email !== email){
-            res.status(409).json({ message: "error/email-unavailable" })
+            res.status(409).json({ message: "Email indisponível!" })
             return
         }
 
@@ -163,8 +163,9 @@ export default class UserController {
         }
 
         if(password){
+
             if(password !== confirmpassword){
-                res.status(400).json({message: "error/password-conflict"})
+                res.status(400).json({message: "As senhas não conhecidem!"})
                 return
             }
 
@@ -176,7 +177,7 @@ export default class UserController {
 
         try {
             await currentUser.save()
-            res.status(200).json({ message: "success/successfully-updated" })
+            res.status(200).json({ user: currentUser })
 
         } catch (error) {
             console.log(error)
