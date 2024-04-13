@@ -158,9 +158,9 @@ export default class UserController {
 
         currentUser.email = email
 
-        if(description){
-            currentUser.description = description
-        }
+       
+        currentUser.description = description
+  
 
         if(password){
 
