@@ -80,6 +80,7 @@ export default class PostController {
         let search = ''
         let offset = 0
         let limit = 5
+        let order = "createdAt"
      
         if(req.query.search){
             search = req.query.search
@@ -93,6 +94,10 @@ export default class PostController {
             limit = req.query.limit
         }
 
+        if(req.query.order){
+            order = req.query.order
+        }
+
         try {
 
             const posts = await Post.findAll({
@@ -103,7 +108,7 @@ export default class PostController {
                 where: {
                     description: {[Op.like]: `%${search}%`}
                 },
-                order: [['likesCount', "DESC"]],
+                order: [[order, "DESC"]],
                 offset: parseInt(offset),
                 limit: parseInt(limit)
             });
