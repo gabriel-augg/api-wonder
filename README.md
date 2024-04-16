@@ -1,4 +1,4 @@
-# Wonder-API RESTFul
+# Wonder-API RESTful
 
 Esta API foi desenvolvida seguindo os padrões REST, e foi feita em conjunto com o projeto Wonder. 
 
