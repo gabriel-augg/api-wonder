@@ -6,8 +6,6 @@ Wonder é uma rede social de mensagens de textos semelhante ao X, antigo Twitter
 
 Cique [aqui](https://github.com/gabriel-augg/wonder) para mais informações sobre o projeto Wonder.
 
-Cique [aqui]() para ver os ENDPOINTS da API.
-
 ## 💻 Tecnologias
 
 - JavaScript
